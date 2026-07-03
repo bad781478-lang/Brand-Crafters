@@ -1,0 +1,125 @@
+.services-page {
+  background-color: var(--charcoal-black);
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+/* Light / Dark section rhythm */
+.services-section-dark {
+  background-color: var(--charcoal-black);
+  color: #ffffff;
+}
+
+.services-section-light {
+  background-color: var(--light-grey-surface);
+  color: var(--charcoal-black);
+}
+
+/* Base layout utility */
+.services-container {
+  max-width: 1280px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .services-container {
+    padding-right: 3rem;
+    padding-left: 3rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-container {
+    padding-right: 4rem;
+    padding-left: 4rem;
+  }
+}
+
+/* Typography styles */
+.service-pill {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.service-pill:hover {
+  background-color: rgba(255, 255, 255, 1);
+  color: #000;
+  border-color: #fff;
+  transform: translateY(-2px);
+}
+
+/* SVG grid drawing */
+.svg-grid-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+/* Metric Cards */
+.metric-card {
+  border: 1px solid var(--border-grey);
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(17, 17, 17, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+}
+
+.metric-card:hover .metric-number {
+  color: var(--charcoal-black);
+  text-shadow: 0 0 1px rgba(0,0,0,0.2);
+}
+
+/* Dark Cards */
+.dark-card {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.dark-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 30px -10px rgba(255,255,255,0.02);
+}
+
+/* Custom CSS Keyframe Float */
+@keyframes slowFloat {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: slowFloat 6s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: slowFloat 7s ease-in-out infinite reverse;
+}
+
+/* Marquee */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+}
+
+.marquee-content {
+  display: flex;
+  animation: marqueeLoop 28s linear infinite;
+}
+
+@keyframes marqueeLoop {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); } /* Assuming content is doubled */
+}
+
+/* Dashboard Mockup Details */
+.mockup-line {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+}

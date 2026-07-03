@@ -1,0 +1,39 @@
+.partner-reveal-word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+.partner-headline-line {
+  transform: translateZ(0);
+}
+
+.partner-section {
+  contain: paint;
+}
+
+@media (max-width: 767px) {
+  .partner-section {
+    min-height: 100svh;
+  }
+
+  .partner-headline {
+    max-width: 100%;
+  }
+
+  .partner-intro {
+    max-width: 32rem;
+  }
+
+  .partner-point-copy {
+    max-width: 34rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-reveal-word,
+  .partner-headline-line > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}

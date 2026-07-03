@@ -1,0 +1,335 @@
+Technical Bugs Audit + Fix
+Brand Crafters Homepage
+Document type
+Targeted frontend bug-fix brief
+Stack
+React + Vite + GSAP + Framer Motion
+Prepared
+June 26, 2026
+Primary rule
+Fix only the listed bugs; do not refactor, redesign, or change visual appearance.
+Comment requirement
+After every fix, add // BUG-FIX: [ID].
+
+
+Run first: Use the project-discovery command below before making fixes so the component layout is understood.
+find ./src -type f -name "*.jsx" -o -name "*.tsx" \
+  -o -name "*.js" -o -name "*.css" | sort
+Bug Index
+ID
+Severity
+Area
+Required fix
+BUG-01
+High
+Services scroll cue / cinematic grid anchor
+Update the scroll cue to #media-system-section.
+BUG-02
+High
+OurServicesSection / services-section cards
+Add accessible navigation to all four service cards.
+BUG-03
+Medium
+Mobile nav Get In Touch CTA
+Close the mobile menu, then navigate to /contact.
+BUG-04
+High
+FAQ accordion
+Convert FAQ rows to accessible buttons.
+BUG-05
+Critical
+CTASection / cta-wrapper background image
+Replace the external CTA image URL with a local asset or placeholder.
+BUG-06
+Medium
+BusinessTrackSection and StickyCinematicGrid
+Lazy-load cinematic grid videos until scroll entry.
+BUG-07
+Low
+FAQ section deep link target
+Add a hidden #faq-section anchor above the FAQ panel.
+
+Fix Instructions
+Fix all seven bugs in order. Preserve the existing animation timing, scroll behavior, visual identity, color system, typography, and section composition unless a listed fix explicitly requires a local code change.
+BUG-01 - Broken anchor: scroll cue dead link
+Severity
+High
+File target
+Search for scroll-down-container or signal-section in src/
+Area
+Services scroll cue / cinematic grid anchor
+
+Problem
+A services-section scroll cue links to #signal-section, but no rendered DOM element has id="signal-section". Clicking the cue does nothing.
+Required Fix
+Change the scroll cue href from #signal-section to #media-system-section.
+Reason: The cinematic grid section already renders id="media-system-section", which is the correct next section in the scroll narrative.
+Grep to Find
+grep -rn "signal-section" ./src/
+Fix Steps
+	•	Find the scroll cue anchor tag with class scroll-down-container.
+	•	Change href="#signal-section" to href="#media-system-section".
+	•	Add the required implementation comment near the change: // BUG-FIX: BUG-01.
+Verify
+grep -n "signal-section\|media-system-section" ./src/**/*.jsx
+signal-section should return 0 results.
+media-system-section should exist in one file.
+BUG-02 - Non-functional service cards not clickable
+Severity
+High
+File target
+Search for OurServicesSection or services-section in src/
+Area
+OurServicesSection / services-section cards
+
+Problem
+The four service cards show cursor:pointer and a View Details CTA bar, but the card wrapper is a non-interactive div with no click, keyboard, or navigation behavior.
+Required Fix
+Make each card operate as a keyboard-accessible button-style card that routes to the correct service anchor.
+Reason: The existing visual treatment promises interaction; the implementation must preserve that appearance while making the interaction real.
+Grep to Find
+grep -rn "View Details\|cursor-pointer" ./src/ --include="*.jsx"
+Fix Steps
+	•	Locate the four service card outer divs with classes containing group sticky or group lg:relative and cursor-pointer.
+	•	Add role="button", tabIndex={0}, an onClick route, an aria-label, and an Enter/Space onKeyDown handler to each card.
+	•	Map Brand Identity to /services#brand-identity.
+	•	Map Websites & Apps to /services#websites-apps.
+	•	Map Creative Production to /services#creative-production.
+	•	Map Marketing & Visibility to /services#marketing.
+	•	If React Router is already used in that file, prefer useNavigate() and navigate('/services#...') over window.location.href.
+	•	Change the inner View Details element from div to span so the button-role parent does not contain nested interactive content.
+	•	Add the required implementation comment near each card change: // BUG-FIX: BUG-02.
+Implementation Pattern
+<div
+  className="group sticky lg:relative ... cursor-pointer origin-top"
+  onClick={() => window.location.href = '/services#brand-identity'}
+  role="button"
+  tabIndex={0}
+  aria-label="View Brand Identity service details"
+  onKeyDown={(e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.location.href = '/services#brand-identity';
+    }
+  }}
+>
+Verify
+Each card has role, tabIndex, onClick, onKeyDown, and aria-label.
+No nested button or anchor exists inside the card div.
+BUG-03 - Broken navigation: mobile nav CTA
+Severity
+Medium
+File target
+Search for Navbar, PlayaNavbar, or nav component in src/
+Area
+Mobile nav Get In Touch CTA
+
+Problem
+The mobile menu Get In Touch CTA closes the menu but does not navigate, leaving the user on the same page.
+Required Fix
+Keep the close-menu behavior and add navigation to /contact.
+Reason: The CTA should both clear the mobile panel and complete the promised route transition.
+Grep to Find
+grep -rn "Get In Touch\|mobile.*menu\|menu.*mobile" ./src/ --include="*.jsx" -l
+Fix Steps
+	•	Find the mobile CTA button inside the mobile menu panel, not the desktop CTA.
+	•	Update its onClick so it first closes the menu and then navigates to /contact.
+	•	Use React Router navigate('/contact') if useNavigate is already available in the component.
+	•	Add aria-label="Navigate to contact page" to the button.
+	•	Add the required implementation comment near the click handler: // BUG-FIX: BUG-03.
+Implementation Pattern
+onClick={() => {
+  setMenuOpen(false);
+  window.location.href = '/contact';
+}}
+Verify
+The mobile CTA onClick contains both menu close logic and navigation.
+Neither close-only nor navigate-only behavior is acceptable.
+BUG-04 - Accessibility: FAQ not keyboard navigable
+Severity
+High
+File target
+Search for FAQ or faq-section in src/
+Area
+FAQ accordion
+
+Problem
+FAQ question rows are plain div elements with onClick handlers and focus:outline-none. Keyboard users cannot tab to the rows, and screen readers cannot identify them as interactive controls.
+Required Fix
+Convert each question row to a real button with accessible expanded-state wiring and visible keyboard focus.
+Reason: This resolves the WCAG 2.1 AA keyboard access failure without changing the visual design.
+Grep to Find
+grep -rn "faq.*click\|onClick.*faq\|FAQ\|accordion" ./src/ --include="*.jsx" -l
+Fix Steps
+	•	Find every FAQ question row with flex items-center justify-between, cursor-pointer, and onClick.
+	•	Change each question row from div to button type="button".
+	•	Add id={`faq-question-${index}`} to each question button.
+	•	Add aria-expanded={openIndex === index} and aria-controls={`faq-answer-${index}`}.
+	•	On the expanded answer div, add id={`faq-answer-${index}`}, role="region", and aria-labelledby={`faq-question-${index}`}.
+	•	Remove focus:outline-none and replace it with the focus-visible ring pattern.
+	•	Keep the h3 inside the button if present; button > h3 is valid HTML.
+	•	Add the required implementation comment near the FAQ change: // BUG-FIX: BUG-04.
+Implementation Pattern
+<button
+  type="button"
+  className="flex items-center justify-between w-full py-5 ... cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent text-left"
+  id={`faq-question-${index}`}
+  aria-expanded={openIndex === index}
+  aria-controls={`faq-answer-${index}`}
+  onClick={() => toggleFaq(index)}
+>
+Verify
+Tab through the page in browser dev tools.
+All seven FAQ items are reachable via Tab.
+Enter and Space toggle open/closed state.
+aria-expanded updates correctly.
+BUG-05 - Broken asset: CTA placeholder image
+Severity
+Critical
+File target
+Search for CTASection or cta-wrapper in src/
+Area
+CTASection / cta-wrapper background image
+
+Problem
+The CTA section background image loads from a third-party Lovable staging URL that Brand Crafters does not own. It can disappear, trigger production CORS issues, and slow down production loads.
+Required Fix
+Replace the external staging image in both desktop and mobile CTA images with a local asset, or use a launch-blocking placeholder if no asset is available.
+Reason: Production UI must not depend on a third-party staging CDN for a critical visual asset.
+Grep to Find
+grep -rn "kinetic-depth-stage\|lovable.app\|woman-laptop" ./src/ --include="*.jsx"
+Fix Steps
+	•	If the image is available locally, save it as public/images/cta-bg.jpg or src/assets/cta-bg.jpg.
+	•	Replace the external src in both the desktop img and mobile img.
+	•	If no image is available, replace both img elements with the styled placeholder div from the source audit.
+	•	When using the placeholder path, add TODO BUG-05 above the component and make it a pre-production replacement requirement.
+	•	Add the required implementation comment near the changed asset path or placeholder: // BUG-FIX: BUG-05.
+Implementation Pattern
+src="/images/cta-bg.jpg"
+
+// TODO BUG-05: Replace placeholder with real branded image before production deployment.
+// Required: professional workspace/laptop photo
+// Dimensions: min 1920x1080, object-position right
+Verify
+grep -rn "kinetic-depth\|lovable.app" ./src/
+The command should return 0 results.
+
+BUG-06 - Performance: video preload strategy wrong
+Severity
+Medium
+File target
+Search for preload="auto" and preload in JSX files
+Area
+BusinessTrackSection and StickyCinematicGrid
+
+Problem
+The cinematic grid videos use preload="auto", forcing nine videos to start downloading on page load even before users scroll near the section.
+Required Fix
+Keep hero video preload="auto", but set cinematic grid videos to preload="none" until the grid section enters the viewport.
+Reason: The hero video is likely LCP and should load immediately; below-the-fold grid videos should wait until the ScrollTrigger hook is active.
+Grep to Find
+grep -rn 'preload="auto"' ./src/
+grep -rn "preload" ./src/ --include="*.jsx"
+Fix Steps
+	•	In StickyCinematicGrid, change video preload="auto" to preload="none".
+	•	Inside the existing GSAP ScrollTrigger hook for the grid section, query gridRef.current for video elements when the section enters the viewport.
+	•	Set each grid video preload to auto inside that hook.
+	•	Do not change the hero video preload behavior.
+	•	Add the required implementation comment near the grid preload logic: // BUG-FIX: BUG-06.
+Implementation Pattern
+const videos = gridRef.current.querySelectorAll('video');
+videos.forEach((v) => {
+  v.preload = 'auto';
+});
+Verify
+grep -rn 'preload="auto"' ./src/
+Only HeroSection should contain preload="auto".
+All other video elements should use preload="none" initially.
+BUG-07 - Missing scroll target: FAQ top margin
+Severity
+Low
+File target
+FAQ section component
+Area
+FAQ section deep link target
+
+Problem
+The FAQ section uses -mt-[100vh] to create an overlap effect, but direct links to #faq-section scroll to the wrong position because the negative margin changes the target position.
+Required Fix
+Create a zero-height invisible anchor above the negatively-margined section, then rename the visual section id to faq-section-panel.
+Reason: Deep links can land correctly while preserving the existing overlap effect.
+Grep to Find
+grep -rn "faq-section\|-mt-\[100vh\]" ./src/ --include="*.jsx"
+Fix Steps
+	•	Find the FAQ section element with id="faq-section".
+	•	Insert a zero-height hidden anchor div with id="faq-section" immediately above the section.
+	•	Change the existing section id to faq-section-panel.
+	•	Update footer FAQ links, if present, so they still point to #faq-section.
+	•	Add the required implementation comment near the anchor: // BUG-FIX: BUG-07.
+Implementation Pattern
+<div
+  id="faq-section"
+  style={{ position: 'relative', top: 0, height: 0, visibility: 'hidden', pointerEvents: 'none' }}
+  aria-hidden="true"
+/>
+<section
+  id="faq-section-panel"
+  className="... -mt-[100vh]"
+>
+Verify
+grep -rn "faq-section" ./src/
+The scroll anchor div should appear before the section element.
+Post-Fix Verification Checklist
+OK
+Bug
+Required evidence
+Command or check
+[ ]
+BUG-01
+No #signal-section href anywhere; signal-section grep returns 0 results.
+grep -rn "signal-section" ./src/
+[ ]
+BUG-02
+All four service cards have role="button" in the services component.
+grep -rn 'role="button"' ./src/
+[ ]
+BUG-03
+Mobile CTA has menu close logic and contact navigation in the same onClick.
+Inspect mobile CTA handler for setMenuOpen plus navigate or href.
+[ ]
+BUG-04
+FAQ questions are button elements; seven FAQ controls are keyboard reachable.
+grep -rn "faq.*<button\|<button.*faq" ./src/
+[ ]
+BUG-05
+No external Lovable or kinetic-depth image URLs remain.
+grep -rn "lovable.app\|kinetic-depth" ./src/
+[ ]
+BUG-06
+Only HeroSection still uses preload="auto".
+grep -rn 'preload="auto"' ./src/
+[ ]
+BUG-07
+FAQ scroll anchor div exists above the visual FAQ section.
+grep -rn "faq-section" ./src/
+
+Browser Console Final Check
+document.querySelectorAll('[href="#signal-section"]')
+-> Should return empty NodeList
+
+document.querySelectorAll('.group[role="button"]')
+-> Should return 4 nodes (service cards)
+
+document.querySelectorAll('#faq-section button')
+-> Should return 7 nodes (FAQ questions)
+Do Not Touch
+Any GSAP ScrollTrigger timing values
+Any Framer Motion animation variants
+Any Lenis smooth scroll configuration
+Any CSS variables or post-second-theme.css
+Any visual styling, colors, or typography
+The business track horizontal scroll system
+The physics footer (Matter.js engine)
+The cinematic grid zoom animation
+Hero video or poster image
+Final constraint: This is a bug-fix pass only. Shape, feel, and visual identity must remain 100% unchanged.

@@ -1,0 +1,348 @@
+/*
+ * Visual system for sections after the business-track section.
+ * Motion declarations intentionally live in their original component files.
+ */
+
+:root {
+  --post-white: #ffffff;
+  --post-black: #000000;
+  --post-ink: #23272f;
+  --post-surface: #222222;
+  --post-border: #dddddd;
+  --post-muted: #333333;
+  --post-pink: #ffbfe6;
+  --post-font: "Drweb", "Outfit", "Manrope", system-ui, sans-serif;
+}
+
+/* Shared rhythm: section 3 dark, section 4 light, continuing in alternation. */
+#services,
+.hc-home-continuation,
+.scg-section,
+.partner-section,
+.cta-wrapper,
+footer {
+  font-family: var(--post-font);
+}
+
+#services,
+.scg-section,
+.hc-faq,
+footer {
+  background-color: var(--post-black) !important;
+  color: var(--post-white);
+}
+
+.hc-signal,
+.partner-section,
+.cta-wrapper {
+  background-color: var(--post-white) !important;
+  color: var(--post-black);
+}
+
+/* Section 3: services — flat, border-led dark surfaces. */
+#services > .absolute {
+  display: none;
+}
+
+#services .group.sticky,
+#services .group.lg\:relative {
+  border-color: var(--post-border) !important;
+  border-radius: 32px !important;
+  background-color: var(--post-white) !important;
+  box-shadow: none !important;
+}
+
+#services .group.sticky:hover,
+#services .group.lg\:relative:hover {
+  border-color: var(--post-black) !important;
+}
+
+#services .rounded-xl,
+#services .rounded-full {
+  border-radius: 0 !important;
+}
+
+#services p,
+#services li {
+  color: var(--post-black) !important;
+}
+
+#services .scroll-down-container,
+#services .scroll-down-container .scroll-text {
+  color: var(--post-white) !important;
+}
+
+/* Section 4: process — light, crisp and deliberately unshadowed. */
+.hc-home-continuation {
+  background: var(--post-black);
+}
+
+.hc-light {
+  background: var(--post-white);
+  color: var(--post-black);
+}
+
+.hc-signal.hc-light {
+  border-top-color: var(--post-border);
+}
+
+.hc-signal.hc-light .hc-signal__headline,
+.hc-signal__card h3 {
+  color: var(--post-black);
+}
+
+.hc-signal.hc-light .hc-signal__copy,
+.hc-signal__card p {
+  color: var(--post-muted);
+}
+
+.hc-signal__card,
+.hc-signal__card:nth-child(2),
+.hc-signal__card:nth-child(3),
+.hc-signal__card:nth-child(4),
+.hc-signal__card:nth-child(5) {
+  border-color: var(--post-border);
+  border-radius: 0;
+  background: var(--post-white);
+  box-shadow: none;
+}
+
+.hc-signal__card:nth-child(even) {
+  background: var(--post-border);
+}
+
+.hc-signal__card:hover {
+  border-color: var(--post-black);
+}
+
+.hc-signal__card-number {
+  color: rgba(0, 0, 0, 0.08);
+}
+
+/* Section 5: cinematic media — retain the existing camera movement. */
+.scg-section,
+.scg-grid {
+  background-color: var(--post-black);
+}
+
+.scg-cell {
+  background-color: var(--post-surface);
+}
+
+.scg-cell::after {
+  border-color: var(--post-muted);
+  box-shadow: none;
+}
+
+/* Section 6: partner — a true light section, while all orbit motion remains intact. */
+.partner-section {
+  border-top-color: var(--post-black);
+}
+
+.partner-left-panel {
+  background: var(--post-white);
+}
+
+.partner-right-panel {
+  background: var(--post-border);
+}
+
+.partner-heading {
+  color: var(--post-black);
+}
+
+.partner-paragraph {
+  color: var(--post-muted);
+}
+
+.partner-visual {
+  color: var(--post-ink);
+}
+
+.partner-visual::before,
+.partner-visual::after {
+  background: rgba(35, 39, 47, 0.24);
+}
+
+.partner-visual__glow {
+  background: rgba(35, 39, 47, 0.14);
+}
+
+.partner-visual__grid {
+  border-color: rgba(35, 39, 47, 0.28);
+  background-image:
+    linear-gradient(rgba(35, 39, 47, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(35, 39, 47, 0.1) 1px, transparent 1px);
+}
+
+.partner-orbit--outer,
+.partner-orbit--middle,
+.partner-orbit--inner {
+  border-color: rgba(35, 39, 47, 0.56);
+}
+
+.partner-orbit__node {
+  border-color: var(--post-border);
+  background: var(--post-ink);
+  box-shadow: none;
+}
+
+.partner-orbit__node--two {
+  background: var(--post-black);
+  box-shadow: none;
+}
+
+.partner-visual__core {
+  border-color: var(--post-black);
+  background: var(--post-black);
+  color: var(--post-white);
+  box-shadow: none;
+}
+
+.partner-marker {
+  border-color: var(--post-ink);
+  border-radius: 0;
+  background: var(--post-white);
+  box-shadow: none;
+  color: var(--post-black);
+  backdrop-filter: none;
+}
+
+.partner-marker::before {
+  border-radius: 0;
+  background: var(--post-black);
+}
+
+/* Section 7: FAQ — high-contrast dark surface with square controls. */
+.hc-faq {
+  border-top-color: var(--post-muted);
+  background: var(--post-black);
+}
+
+.hc-faq__intro,
+.hc-faq__answer p,
+.hc-faq__question::before {
+  color: var(--post-border);
+}
+
+.hc-faq__list,
+.hc-faq__item {
+  border-color: var(--post-muted);
+}
+
+.hc-faq__item:hover,
+.hc-faq__item[open] {
+  border-color: var(--post-border);
+  background: var(--post-surface);
+}
+
+.hc-faq__icon {
+  border-color: var(--post-border);
+  border-radius: 0;
+  color: var(--post-white);
+}
+
+.hc-faq__item[open] .hc-faq__icon {
+  border-color: var(--post-white);
+  background: var(--post-white);
+  color: var(--post-black);
+}
+
+/* Section 8: CTA — the single light action screen. */
+.cta-wrapper {
+  border-top: 1px solid var(--post-border);
+}
+
+.cta-wrapper .cta-heading h2,
+.cta-wrapper .cta-button {
+  color: var(--post-black);
+}
+
+.cta-wrapper .cta-paragraph p {
+  color: var(--post-muted);
+  opacity: 1;
+}
+
+.cta-wrapper .line {
+  background: var(--post-border);
+}
+
+.cta-wrapper .fill-line {
+  background: var(--post-black);
+}
+
+/* Section 9: footer — dark, flat panels using the same border language. */
+footer {
+  border-top: 1px solid var(--post-muted);
+}
+
+footer .rounded-xl {
+  border: 1px solid var(--post-muted);
+  border-radius: 0 !important;
+  background-color: var(--post-surface) !important;
+  box-shadow: none !important;
+}
+
+footer .rounded-full {
+  border-radius: 0 !important;
+}
+
+footer .text-gray-300,
+footer .text-gray-400,
+footer .text-gray-500 {
+  color: var(--post-border) !important;
+}
+
+footer .border-white\/5,
+footer .border-white\/10,
+footer .border-white\/20 {
+  border-color: var(--post-muted) !important;
+}
+
+@media (min-width: 1024px) and (max-height: 820px) {
+  .playa-footer {
+    height: auto !important;
+    min-height: 100svh;
+  }
+
+  .playa-footer__left,
+  .playa-footer__stage {
+    height: auto !important;
+    min-height: 100svh;
+  }
+
+  .playa-footer__left {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  .playa-footer__brand {
+    margin-bottom: 2.5rem !important;
+  }
+
+  .playa-footer__nav {
+    gap: 2rem !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-height: 700px) {
+  .playa-footer__left {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+
+  .playa-footer__brand {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .playa-footer__link-list {
+    gap: 0.75rem !important;
+  }
+}
+
+@media (max-width: 640px) {
+  #services .group.sticky,
+  #services .group.lg\:relative {
+    border-radius: 32px !important;
+  }
+}

@@ -1,0 +1,389 @@
+import { useEffect, useRef, useState } from "react";
+import ArrowUpRight from "lucide-react/dist/esm/icons/arrow-up-right.mjs";
+import { Link } from "react-router-dom";
+import "../post-second-theme.css";
+
+const TAGS = [
+  "Digital Strategy",
+  "Creative Branding",
+  "UI/UX Design",
+  "Web Development",
+  "SEO & Content",
+  "Social Media Marketing",
+  "Conversion Optimization",
+];
+
+function PhysicsPlayground() {
+  const sceneRef = useRef<HTMLDivElement>(null);
+  const measureRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [sizes, setSizes] = useState<{ w: number; h: number }[] | null>(null);
+  const [inView, setInView] = useState(false);
+  const inViewRef = useRef(false);
+  const engineRef = useRef<any>(null);
+  const runnerRef = useRef<any>(null);
+  const renderRef = useRef<any>(null);
+  const matterRef = useRef<any>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isIntersecting = entry.isIntersecting;
+        inViewRef.current = isIntersecting;
+        setInView(isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+    if (sceneRef.current) {
+      observer.observe(sceneRef.current);
+    }
+    return () => observer.disconnect();
+  }, []);
+
+  // Pass 1: measure hidden tag pills so physics bodies match text width
+  useEffect(() => {
+    const measured = measureRefs.current.map((el) => {
+      if (!el) return { w: 240, h: 56 };
+      const r = el.getBoundingClientRect();
+      return { w: r.width, h: r.height };
+    });
+    setSizes(measured);
+  }, []);
+
+  // Pass 2: build the Matter.js world
+  useEffect(() => {
+    if (!sizes || !sceneRef.current) return undefined;
+    const container = sceneRef.current;
+    let disposed = false;
+    let cleanupPhysics = () => {};
+
+    const setupPhysics = async () => {
+      const matterModule = await import("matter-js");
+      if (disposed || !container.isConnected) return;
+
+      const Matter = matterModule.default ?? matterModule;
+      matterRef.current = Matter;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      const {
+        Engine, Render, Runner, Bodies, Composite,
+        Mouse, MouseConstraint, Body, Events,
+      } = Matter;
+
+      const isMobile = window.innerWidth < 768;
+      const engine = Engine.create();
+      engine.gravity.y = isMobile ? 0.8 : 2.0; // Reduced gravity
+
+      const render = Render.create({
+        element: container,
+        engine,
+        options: {
+          width,
+          height,
+          background: "transparent",
+          wireframes: false,
+          pixelRatio: window.devicePixelRatio || 1,
+        },
+      });
+
+      const wallOpts = { isStatic: true, render: { visible: false } };
+      Composite.add(engine.world, [
+        // Floor
+        Bodies.rectangle(width / 2, height + 50, width * 5, 100, wallOpts),
+        // Left wall
+        Bodies.rectangle(-2500, height / 2, 5000, height * 20, wallOpts),
+        // Right wall
+        Bodies.rectangle(width + 2500, height / 2, 5000, height * 20, wallOpts),
+      ]);
+
+      // Enforce constraints to keep objects within view
+      const bodies = [];
+      Events.on(engine, "beforeUpdate", () => {
+        bodies.forEach((b) => {
+          if (b.position.y < -1200) {
+            Body.setPosition(b, { x: b.position.x, y: -1199 });
+            if (b.velocity.y < 0) {
+              Body.setVelocity(b, { x: b.velocity.x * 0.5, y: Math.abs(b.velocity.y) });
+            }
+          }
+          if (b.position.x < -200 || b.position.x > width + 200) {
+            Body.setPosition(b, { x: width / 2, y: -100 });
+            Body.setVelocity(b, { x: 0, y: 10 });
+          }
+          if (b.position.y > height + 200) {
+            Body.setPosition(b, { x: width / 2, y: -100 });
+            Body.setVelocity(b, { x: 0, y: 10 });
+          }
+        });
+      });
+
+      // Pink pill-shaped tags
+      sizes.forEach((s, i) => {
+        const x = 100 + Math.random() * (width - 200);
+        const y = -150 - i * 100;
+        const body = Bodies.rectangle(x, y, s.w, s.h, {
+          chamfer: { radius: s.h / 2 },
+          restitution: 0.45,
+          friction: 0.4,
+          density: 0.002,
+          render: { fillStyle: "#FCE7F8", strokeStyle: "#000", lineWidth: 0 },
+        });
+        Body.setAngle(body, (Math.random() - 0.5) * 0.6);
+        (body as any).custom = { type: "tag", text: TAGS[i] };
+        bodies.push(body);
+      });
+
+      // Two pink circles with cross
+      const baseRadii = isMobile ? [50, 45] : [100, 90];
+      baseRadii.forEach((r, idx) => {
+        const x = 150 + Math.random() * (width - 300);
+        const y = -300 - idx * 150;
+        const c = Bodies.circle(x, y, r, {
+          restitution: 0.5,
+          friction: 0.3,
+          density: 0.003,
+          render: { fillStyle: "#FCA5E1" },
+        });
+        (c as any).custom = { type: "circle", r, idx };
+        bodies.push(c);
+      });
+
+      Composite.add(engine.world, bodies);
+
+      // Drag with mouse
+      const mouse = Mouse.create(render.canvas);
+      const mouseConstraint = MouseConstraint.create(engine, {
+        mouse,
+        constraint: { stiffness: 0.2, render: { visible: false } },
+      });
+      Composite.add(engine.world, mouseConstraint);
+      render.mouse = mouse;
+
+      // Overlay: draw labels and arrow glyphs on top of Matter's shapes
+      const ctx = render.context;
+      Events.on(render, "afterRender", () => {
+        bodies.forEach((b) => {
+          const custom = (b as any).custom;
+          if (!custom) return;
+          ctx.save();
+          ctx.translate(b.position.x, b.position.y);
+          ctx.rotate(b.angle);
+          if (custom.type === "tag") {
+            ctx.fillStyle = "#3A0526";
+            const fontSize = window.innerWidth > 768 ? "20px" : "14px";
+            ctx.font = `600 ${fontSize} 'Inter', system-ui, sans-serif`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(custom.text, 0, 0);
+          } else {
+            // Draw a minimal plus/cross symbol
+            ctx.strokeStyle = "#3A0526";
+            ctx.lineWidth = window.innerWidth > 768 ? 2 : 1.5;
+            ctx.lineCap = "round";
+            const s = custom.r * 0.45;
+
+            ctx.save();
+            if (custom.idx === 1) {
+              ctx.rotate(Math.PI / 4); // rotate to make an X
+            }
+            ctx.beginPath();
+            // Vertical line
+            ctx.moveTo(0, -s);
+            ctx.lineTo(0, s);
+            // Horizontal line
+            ctx.moveTo(-s, 0);
+            ctx.lineTo(s, 0);
+            ctx.stroke();
+            ctx.restore();
+          }
+          ctx.restore();
+        });
+      });
+
+      const runner = Runner.create();
+      engineRef.current = engine;
+      runnerRef.current = runner;
+      renderRef.current = render;
+
+      if (inViewRef.current) {
+        Runner.run(runner, engine);
+        Render.run(render);
+      } else {
+        Runner.stop(runner);
+        Render.stop(render);
+      }
+
+      const handleResize = () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        const dpr = window.devicePixelRatio || 1;
+        render.canvas.width = w * dpr;
+        render.canvas.height = h * dpr;
+        render.canvas.style.width = `${w}px`;
+        render.canvas.style.height = `${h}px`;
+        render.options.width = w;
+      };
+      window.addEventListener("resize", handleResize);
+
+      cleanupPhysics = () => {
+        window.removeEventListener("resize", handleResize);
+        Render.stop(render);
+        Runner.stop(runner);
+        Composite.clear(engine.world, false);
+        Engine.clear(engine);
+        render.canvas.remove();
+        
+        engineRef.current = null;
+        runnerRef.current = null;
+        renderRef.current = null;
+      };
+    };
+
+    setupPhysics();
+
+    return () => {
+      disposed = true;
+      cleanupPhysics();
+    };
+  }, [sizes]);
+
+  useEffect(() => {
+    if (matterRef.current && runnerRef.current && engineRef.current && renderRef.current) {
+      if (inView) {
+        matterRef.current.Runner.run(runnerRef.current, engineRef.current);
+        matterRef.current.Render.run(renderRef.current);
+      } else {
+        matterRef.current.Runner.stop(runnerRef.current);
+        matterRef.current.Render.stop(renderRef.current);
+      }
+    }
+  }, [inView]);
+
+  return (
+    <div className="relative h-full w-full min-h-[400px] md:min-h-[200px] overflow-hidden rounded-[20px] bg-[#0A0A0A]">
+      {!sizes && (
+        <div className="invisible absolute">
+          {TAGS.map((t, i) => (
+            <div
+              key={t}
+              ref={(el) => { measureRefs.current[i] = el; }}
+              className="inline-block whitespace-nowrap px-6 md:px-10 py-3 md:py-4 text-[14px] md:text-[20px] font-semibold"
+              style={{ fontFamily: "Inter, system-ui, sans-serif" }}
+            >
+              {t}
+            </div>
+          ))}
+        </div>
+      )}
+      <div ref={sceneRef} className="absolute inset-0" />
+    </div>
+  );
+}
+
+export default function PlayaFooter() {
+  return (
+    <footer className="relative z-50 bg-black w-full h-auto overflow-hidden flex flex-col px-4 py-8 pb-12 md:px-8 md:py-8 lg:px-10 lg:py-10">
+      <div className="w-full flex flex-col">
+        <div className="grid gap-4 lg:grid-cols-2 lg:gap-4 flex-1">
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col gap-4">
+            {/* Brand block */}
+            <div className="flex flex-row items-center gap-6 md:gap-10 rounded-[20px] bg-[#0A0A0A] px-8 py-10 lg:px-16 lg:py-16 overflow-hidden w-full min-h-[250px] lg:min-h-[300px]">
+              <svg viewBox="0 0 60 60" className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 lg:w-32 lg:h-32" fill="none">
+                {Array.from({ length: 12 }).map((_, i) => {
+                  const a = (i * Math.PI) / 6;
+                  return (
+                    <line
+                      key={i}
+                      x1={30} y1={30}
+                      x2={30 + Math.cos(a) * 28}
+                      y2={30 + Math.sin(a) * 28}
+                      stroke="#FFF" strokeWidth="3" strokeLinecap="round"
+                    />
+                  );
+                })}
+              </svg>
+              <div className="font-headline font-extrabold tracking-[-0.02em] text-white leading-[0.9] text-[3rem] sm:text-[4.5rem] md:text-[6rem] lg:text-[7rem] uppercase m-0 flex flex-col">
+                <span>BRAND</span>
+                <span>CRAFTERS</span>
+              </div>
+            </div>
+
+            {/* Nav grid */}
+            <div className="rounded-[20px] bg-[#0A0A0A] px-8 py-10 lg:px-16 lg:py-12 flex flex-col flex-1 min-h-[380px] lg:min-h-[400px] relative overflow-hidden group">
+              <div className="grid grid-cols-2 gap-8 md:gap-16 h-full relative z-10">
+                {/* Left side: Quick Links */}
+                <div className="flex flex-col">
+                  <h3 className="mb-6 md:mb-8 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.15em] text-[#9a9a9a]">Quick Links</h3>
+                  <ul className="flex flex-col gap-4 md:gap-6">
+                    {[
+                      { name: "Home", href: "/" },
+                      { name: "About", href: "/about" },
+                      { name: "Our Services", href: "/services" },
+                      { name: "Contact", href: "/contact" }
+                    ].map((l) => (
+                      <li key={l.name}>
+                        <Link 
+                          className="flex items-center gap-3 text-[18px] md:text-[22px] font-bold text-white transition-all hover:text-white/70" 
+                          to={l.href}
+                        >
+                          {l.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Right side: Explore */}
+                <div className="flex flex-col">
+                  <h3 className="mb-6 md:mb-8 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.15em] text-[#9a9a9a]">Explore</h3>
+                  <ul className="flex flex-col gap-4 md:gap-6">
+                    {[
+                      { name: "Brand Identity", href: "/services#brand-identity" },
+                      { name: "Websites & Apps", href: "/services#websites-apps" },
+                      { name: "Creative Production", href: "/services#creative-production" },
+                      { name: "Marketing & Visibility", href: "/services#marketing-visibility" },
+                    ].map((l) => (
+                      <li key={l.name}>
+                        <Link 
+                          className="flex items-center gap-3 text-[14px] md:text-[16px] font-semibold text-[#b3b3b3] transition-all hover:text-white" 
+                          to={l.href}
+                        >
+                          {l.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Decorative Bottom CTA */}
+              <div className="mt-auto pt-8 relative z-10 w-full border-t border-white/5">
+                <Link to="/contact" className="flex items-center justify-between group/cta w-full">
+                  <span className="text-[14px] md:text-[15px] font-medium text-[#8f8f8f] transition-colors group-hover/cta:text-white">Start a project</span>
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[9999px] border border-white/10 bg-transparent p-0 transition-[background-color,border-color,transform] duration-500 ease-[ease] group-hover/cta:bg-white group-hover/cta:border-white">
+                    <ArrowUpRight className="h-5 w-5 text-white transition-colors duration-500 ease-[ease] group-hover/cta:text-black" strokeWidth={1.5} />
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN — physics playground */}
+          <div className="min-h-[400px] md:min-h-[500px] lg:h-full lg:min-h-[auto] rounded-[20px] overflow-hidden">
+            <PhysicsPlayground />
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 text-[10px] md:text-[11px] font-semibold text-[#808080] tracking-wider px-2 md:px-4">
+          <span className="uppercase">© 2026 BRAND CRAFTERS</span>
+          <div className="flex items-center gap-6 md:gap-10">
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}

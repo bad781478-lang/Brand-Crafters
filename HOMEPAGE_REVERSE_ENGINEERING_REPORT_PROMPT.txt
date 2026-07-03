@@ -1,0 +1,153 @@
+HOMEPAGE REVERSE ENGINEERING REPORT PROMPT
+
+I will provide one or more of the following:
+
+- Homepage source code
+- Screenshots
+- Live URL
+- Exported project files
+- Design files
+
+Your task is to act as:
+
+- Senior UI/UX Designer
+- Creative Director
+- Motion Designer
+- GSAP Engineer
+- Framer Motion Expert
+- Webflow Animator
+- Conversion Strategist
+- Brand Designer
+- Frontend Experience Analyst
+
+Your job is not to explain the code.
+
+Your job is to completely dissect and describe the homepage from 1% to 100%.
+
+I want an ultra-detailed reverse engineering report.
+
+Analyze everything visible and invisible.
+
+Nothing should be skipped.
+
+Describe every section, every element, every interaction, every animation, every design decision, and every UX decision.
+
+For each section provide:
+
+- Purpose
+- User psychology
+- Conversion goal
+- Visual hierarchy
+- Content strategy
+- Layout logic
+- Attention flow
+
+For every element describe:
+
+- Position
+- Size relationship
+- Alignment
+- Spacing
+- Typography
+- Contrast
+- Visual weight
+- Purpose
+
+For every animation describe:
+
+- Trigger
+- Initial state
+- Final state
+- Duration
+- Delay
+- Easing
+- Direction
+- Scale values
+- Opacity values
+- Blur values
+- Rotation values
+- Stagger sequence
+- Layer relationship
+- Scroll dependency
+
+Describe:
+
+1. Brand personality
+2. Visual identity
+3. Design language
+4. Art direction
+5. Typography system
+6. Color psychology
+7. Grid system
+8. Spacing system
+9. Component system
+10. CTA strategy
+11. Trust-building techniques
+12. User journey
+13. Conversion flow
+14. Content hierarchy
+15. Information architecture
+16. Scroll storytelling
+17. Section transitions
+18. Hero strategy
+19. Card design logic
+20. Image treatment
+21. Illustration style
+22. Icon style
+23. Hover states
+24. Active states
+25. Loading states
+26. Mouse interactions
+27. Cursor effects
+28. Micro-interactions
+29. Motion language
+30. Premium design techniques
+
+For scroll animations explain:
+
+- What appears first
+- What appears second
+- Exact sequence
+- Exact timing logic
+- Why that order exists
+- How attention is controlled
+
+For visual design explain:
+
+- Why elements are placed there
+- Why spacing exists
+- Why typography is sized that way
+- Why colors are used
+- Why animations are used
+
+Identify:
+
+- Hidden UX patterns
+- Conversion psychology
+- Attention traps
+- Premium agency techniques
+- Design tricks
+- Motion tricks
+- Storytelling techniques
+
+At the end create:
+
+HOMEPAGE DNA REPORT
+
+Including:
+
+- Design Blueprint
+- Motion Blueprint
+- UX Blueprint
+- Content Blueprint
+- Visual Blueprint
+- Recreation Blueprint
+
+The output should be so detailed that a world-class design and development team can recreate the homepage with 99.9% visual, motion, and experience accuracy without seeing the original website again.
+
+Never summarize.
+Never explain code.
+Never be brief.
+Describe everything from the smallest detail to the largest system.
+Assume nothing is too small to mention.
+

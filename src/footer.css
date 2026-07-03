@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --font-headline: "Oswald", "Plus Jakarta Sans", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Sora", "Outfit", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root {
+  font-family: var(--font-body);
+  background: #000;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #000;
+}

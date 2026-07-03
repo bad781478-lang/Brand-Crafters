@@ -1,0 +1,41 @@
+{
+  "name": "business-track-section-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint src vite.config.js tailwind.config.js eslint.config.js --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "framer-motion": "^12.40.0",
+    "gsap": "^3.12.5",
+    "lenis": "^1.3.23",
+    "lucide-react": "^1.21.0",
+    "matter-js": "^0.20.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "@tailwindcss/vite": "^4.3.1",
+    "@types/matter-js": "^0.20.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^6.0.3",
+    "autoprefixer": "^10.5.0",
+    "eslint": "^9.39.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
+    "postcss": "^8.5.15",
+    "sharp": "^0.35.2",
+    "tailwindcss": "^4.3.1",
+    "vite": "^8.1.0",
+    "vite-plugin-compression": "^0.5.1"
+  }
+}

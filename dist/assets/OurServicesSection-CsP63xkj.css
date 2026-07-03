@@ -1,0 +1,1 @@
+.scroll-wave{will-change:transform;animation:1.5s linear infinite moveExactWave}@keyframes moveExactWave{0%{transform:translate(0)}to{transform:translate(-45px)}}@media (prefers-reduced-motion:reduce){.scroll-wave{animation:none}}

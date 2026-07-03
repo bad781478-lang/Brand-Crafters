@@ -1,0 +1,131 @@
+.scg-section,
+.scg-section * {
+  box-sizing: border-box;
+}
+
+.scg-section {
+  position: relative;
+  z-index: 32;
+  width: 100%;
+  height: 100vh;
+  min-height: 680px;
+  overflow: hidden;
+  background: #050505;
+  color: #ffffff;
+  isolation: isolate;
+}
+
+.scg-section::before,
+.scg-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.scg-section::before {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.2), transparent 24%, transparent 76%, rgba(0, 0, 0, 0.25)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.15), transparent 22%, transparent 78%, rgba(0, 0, 0, 0.15));
+}
+
+.scg-section::after {
+  opacity: 0.28;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: calc(100vw / 9) calc(100vh / 9);
+  mix-blend-mode: screen;
+}
+
+.scg-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.35rem, 0.65vw, 0.8rem);
+  padding: clamp(0.35rem, 0.65vw, 0.8rem);
+  background: #0b0b0b;
+  will-change: transform;
+}
+
+.scg-cell {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  background: #111111;
+  will-change: opacity, transform;
+}
+
+.scg-cell::before,
+.scg-cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.scg-cell::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 28%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.15), transparent 56%);
+  opacity: 0.5;
+}
+
+.scg-cell::after {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
+.scg-cell--4 {
+  z-index: 3;
+}
+
+.scg-cell--4::before {
+  opacity: 0.2;
+}
+
+.scg-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.9) contrast(1.05) brightness(1.05);
+  transform: scale(1.01);
+  will-change: transform;
+}
+
+.scg-cell--4 .scg-media {
+  filter: saturate(1) contrast(1.05) brightness(1.1);
+}
+
+@media (max-width: 1023px) {
+  .scg-section {
+    height: 100svh;
+    min-height: 620px;
+  }
+
+  .scg-grid {
+    gap: 0.35rem;
+    padding: 0.35rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .scg-section {
+    min-height: 580px;
+  }
+
+  .scg-grid {
+    gap: 0.28rem;
+    padding: 0.28rem;
+  }
+}

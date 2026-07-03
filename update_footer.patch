@@ -1,0 +1,46 @@
+--- src/components/PlayaFooter.tsx
++++ src/components/PlayaFooter.tsx
+@@ -121,12 +121,12 @@
+       // Pink pill-shaped tags
+       sizes.forEach((s, i) => {
+         const x = 100 + Math.random() * (width - 200);
+         const y = -150 - i * 100;
+         const body = Bodies.rectangle(x, y, s.w, s.h, {
+           chamfer: { radius: s.h / 2 },
+           restitution: 0.45,
+           friction: 0.4,
+           density: 0.002,
+-          render: { fillStyle: "#FCE7F8", strokeStyle: "#000", lineWidth: 0 },
++          render: { fillStyle: "#FFFFFF", strokeStyle: "#000", lineWidth: 0 },
+         });
+         Body.setAngle(body, (Math.random() - 0.5) * 0.6);
+         (body as any).custom = { type: "tag", text: TAGS[i] };
+@@ -139,12 +139,12 @@
+       baseRadii.forEach((r, idx) => {
+         const x = 150 + Math.random() * (width - 300);
+         const y = -300 - idx * 150;
+         const c = Bodies.circle(x, y, r, {
+           restitution: 0.5,
+           friction: 0.3,
+           density: 0.003,
+-          render: { fillStyle: "#FCA5E1" },
++          render: { fillStyle: "#FFFFFF" },
+         });
+         (c as any).custom = { type: "circle", r, idx };
+         bodies.push(c);
+@@ -169,12 +169,12 @@
+           ctx.translate(b.position.x, b.position.y);
+           ctx.rotate(b.angle);
+           if (custom.type === "tag") {
+-            ctx.fillStyle = "#3A0526";
++            ctx.fillStyle = "#000000";
+             const fontSize = window.innerWidth > 768 ? "20px" : "14px";
+             ctx.font = `600 ${fontSize} 'Inter', system-ui, sans-serif`;
+             ctx.textAlign = "center";
+             ctx.textBaseline = "middle";
+             ctx.fillText(custom.text, 0, 0);
+           } else {
+             // Draw a minimal plus/cross symbol
+-            ctx.strokeStyle = "#3A0526";
++            ctx.strokeStyle = "#000000";
+             ctx.lineWidth = window.innerWidth > 768 ? 2 : 1.5;

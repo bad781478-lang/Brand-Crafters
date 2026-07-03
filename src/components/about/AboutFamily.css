@@ -1,0 +1,240 @@
+.about-family {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 112px 2rem 10rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.af-container {
+  max-width: 1350px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Typography base */
+.about-family * {
+  font-family: "DrWeb", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: 0;
+  box-sizing: border-box;
+}
+
+.af-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.af-title {
+  font-family: "Oswald", "Outfit", system-ui, sans-serif;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #000000;
+  text-transform: none;
+}
+
+.af-literally {
+  font-family: "Outfit", "Manrope", system-ui, sans-serif;
+  font-size: clamp(0.7rem, 1vw, 0.9rem);
+  font-weight: 800;
+  margin-top: 0.4rem;
+  color: #000000;
+}
+
+.af-quote {
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 400;
+  max-width: 600px;
+  margin: 0 0 80px 0; 
+  padding-left: 24px;
+  border-left: 2px solid #000000;
+}
+
+.af-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 40px;
+  align-items: center;
+}
+
+.af-image-area {
+  grid-column: 2 / 7;
+  width: 100%;
+}
+
+.af-image {
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.af-image-caption {
+  margin-top: 16px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.af-founder-name {
+  font-family: "Oswald", "Outfit", system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.2;
+}
+
+.af-founder-title {
+  font-family: "Outfit", system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #666666;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.af-text-area {
+  grid-column: 7 / 13;
+  display: flex;
+  flex-direction: column;
+  padding-left: 40px;
+  gap: 40px;
+}
+
+.af-text-p1 {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  max-width: 380px;
+  align-self: flex-start;
+  margin: 0;
+}
+
+.af-text-p2 {
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  max-width: 380px;
+  align-self: flex-start;
+  margin: 0 0 0 40px; 
+}
+
+/* Hidden elements */
+.af-hidden-content,
+.af-hidden-bottom {
+  display: none;
+}
+
+.af-caption,
+.af-hidden-para,
+.af-hidden-heading {
+  font-family: 'PPEditorialNew', serif; /* Requested font for hidden text */
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+  .about-family {
+    padding-top: 80px;
+    padding-bottom: 6rem;
+  }
+  
+  .af-container {
+    gap: 20px;
+  }
+  
+  .af-title {
+    /* Using clamp, so no need for strict overrides */
+  }
+  
+  .af-quote {
+    margin: 0;
+  }
+  
+  .af-grid {
+    grid-template-columns: 1fr 1fr; /* Switch to 2-column layout */
+    gap: 20px;
+  }
+
+  .af-image-area {
+    grid-column: 1 / 2;
+    max-width: 500px;
+  }
+
+  .af-image {
+    height: auto;
+    aspect-ratio: 3/4;
+  }
+
+  .af-text-area {
+    grid-column: 2 / 3;
+    gap: 20px;
+  }
+
+  .af-text-p1, .af-text-p2 {
+    max-width: none;
+    align-self: auto;
+    margin: 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .about-family {
+    padding: 60px 2rem 80px 2rem;
+  }
+  
+  .af-title {
+    /* Using clamp */
+  }
+
+  .af-literally {
+    margin-top: 0;
+  }
+  
+  .af-quote {
+    font-size: 16px;
+  }
+
+  .af-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .af-image-area {
+    grid-column: 1 / -1;
+  }
+
+  .af-image {
+    height: auto;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    aspect-ratio: auto;
+  }
+
+  .af-image-caption {
+    align-items: center;
+    text-align: center;
+  }
+
+  .af-text-area {
+    grid-column: 1 / -1;
+    gap: 10px;
+  }
+
+  .af-text-p1, .af-text-p2 {
+    font-size: 16px;
+  }
+}
