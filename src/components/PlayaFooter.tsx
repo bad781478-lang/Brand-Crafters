@@ -351,14 +351,14 @@ export default function PlayaFooter() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="playa-footer relative z-50 bg-black w-full h-[100vh] overflow-hidden flex flex-col lg:flex-row border-t border-white/10">
+    <footer ref={footerRef} className="playa-footer relative z-50 bg-black w-full h-auto lg:h-[100vh] overflow-visible lg:overflow-hidden flex flex-col lg:flex-row border-t border-white/10">
       {/* LEFT COLUMN */}
-      <div className="playa-footer__left relative flex flex-col w-full h-1/2 lg:h-full lg:w-1/2 lg:border-r lg:border-white/10 px-8 py-10 lg:px-20 lg:py-24 justify-between overflow-hidden group/footer">
+      <div className="playa-footer__left relative flex flex-col w-full h-auto lg:h-full lg:w-1/2 lg:border-r lg:border-white/10 px-6 py-10 sm:px-8 lg:px-20 lg:py-24 justify-between overflow-hidden group/footer">
         {/* Subtle background glow */}
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-700 opacity-30 group-hover/footer:opacity-70" />
         
         {/* Brand block */}
-        <div className="playa-footer__brand relative z-10 flex flex-col mb-16 lg:mb-24">
+        <div className="playa-footer__brand relative z-10 flex flex-col mb-10 sm:mb-16 lg:mb-24">
           <h2 className="playa-footer__brand-heading [font-family:Oswald,sans-serif] font-bold tracking-tight leading-[0.9] text-[4.5rem] sm:text-[6rem] md:text-[7.5rem] lg:text-[9rem] xl:text-[10rem] uppercase m-0 flex flex-col group/brand cursor-default text-white">
             <span className="footer-brand-text inline-block">BRAND</span>
             <span className="relative inline-block w-max footer-brand-text">
@@ -369,8 +369,8 @@ export default function PlayaFooter() {
         </div>
 
         {/* Nav grid */}
-        <div className="playa-footer__nav relative z-10 flex flex-col h-full gap-8 lg:gap-16">
-          <div className="playa-footer__nav-row flex flex-row gap-12 sm:gap-20 lg:gap-20 xl:gap-32">
+        <div className="playa-footer__nav relative z-10 flex flex-col h-auto lg:h-full gap-8 lg:gap-16">
+          <div className="playa-footer__nav-row flex flex-row gap-8 sm:gap-20 lg:gap-20 xl:gap-32">
             <div className="flex flex-col">
               <div className="flex items-center gap-3 mb-6 lg:mb-8 footer-nav-header">
                 <div className="flex items-center justify-center w-6 h-6 rounded-full bg-white/5 border border-white/10 transition-colors duration-300 group-hover/footer:border-white/30">
@@ -439,7 +439,7 @@ export default function PlayaFooter() {
           </div>
           
           {/* Bottom links */}
-          <div className="flex flex-col mt-auto pt-8 border-t border-white/10">
+          <div className="playa-footer__bottom flex flex-col mt-8 lg:mt-auto pt-6 sm:pt-8 border-t border-white/10">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 footer-bottom-text">
               <div className="text-[10px] md:text-[11px] font-medium text-white/40 uppercase tracking-widest flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse"></span>
@@ -457,7 +457,7 @@ export default function PlayaFooter() {
       </div>
 
       {/* RIGHT COLUMN — physics playground */}
-      <div className="playa-footer__stage w-full h-1/2 lg:h-full lg:w-1/2 relative">
+      <div className="playa-footer__stage w-full h-[42svh] min-h-[300px] lg:h-full lg:w-1/2 relative">
         <PhysicsPlayground />
       </div>
     </footer>
