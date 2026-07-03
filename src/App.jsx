@@ -107,44 +107,12 @@ function App() {
       scrollPageToStart();
     };
 
-    let viewportWidth = window.innerWidth;
-    let viewportHeight = window.innerHeight;
-    let resizeTimer;
-
-    const handleResize = (event) => {
-      const nextViewportWidth = window.innerWidth;
-      const nextViewportHeight = window.innerHeight;
-      const hasViewportChanged =
-        nextViewportWidth !== viewportWidth || nextViewportHeight !== viewportHeight;
-
-      if (!hasViewportChanged) {
-        return;
-      }
-
-      viewportWidth = nextViewportWidth;
-      viewportHeight = nextViewportHeight;
-      clearTimeout(resizeTimer);
-
-      resizeTimer = setTimeout(() => {
-        scrollPageToStart();
-
-        if (event?.isTrusted === false) {
-          return;
-        }
-
-        window.location.reload();
-      }, 250);
-    };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('pageshow', handlePageShow);
-    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('pageshow', handlePageShow);
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(resizeTimer);
     };
   }, []);
 

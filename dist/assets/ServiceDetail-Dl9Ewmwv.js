@@ -1,4 +1,4 @@
-import{a as e}from"./rolldown-runtime-CNC7AqOf.js";import{f as t,n,s as r,t as i,u as a}from"./index-g5lYoJ1C.js";import{t as o}from"./gsap-BzhAgjyT.js";var s=e(t(),1),c={"brand-identity":{title:`Brand Identity`,eyebrow:`Service 01`,description:`Strategic brand identities that make your business look credible before anyone speaks to you.
+import{a as e}from"./rolldown-runtime-CNC7AqOf.js";import{f as t,n,s as r,t as i,u as a}from"./index-Ca6iCYBH.js";import{t as o}from"./gsap-BzhAgjyT.js";var s=e(t(),1),c={"brand-identity":{title:`Brand Identity`,eyebrow:`Service 01`,description:`Strategic brand identities that make your business look credible before anyone speaks to you.
 
 Your brand identity is the first signal people notice. Before they read your offer or speak to your team, they judge your business through its logo, colors, typography, visuals, and overall presentation.
 
