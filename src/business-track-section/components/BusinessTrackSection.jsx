@@ -57,7 +57,7 @@ const featureCards = [
     title: 'Growth',
     description: 'Connect SEO, campaigns,\nand digital marketing\ninto measurable results.',
     indexLabel: '04',
-    videoSrc: '/video/4thcard.mp4',
+    videoSrc: 'https://avfsxrdfgmumvktolqng.supabase.co/storage/v1/object/sign/assets/2nd%20seaction/4th.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9iMTg2YjBhZi1mZmI3LTQ1NjQtYTVmZC02NDJjYzBkMGMxNzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJhc3NldHMvMm5kIHNlYWN0aW9uLzR0aC5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzgzMDk4Njc5LCJleHAiOjE4Njk0OTg2Nzl9.d8xi7YgZFUvTvVo5_JoQDsNOnb46ObRHvOEDb_NR72s',
     layers: [
       {
         className: 'bt-business-layer--integrated-back',
